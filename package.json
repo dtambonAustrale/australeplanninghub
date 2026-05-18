@@ -20,7 +20,8 @@
     "@headlessui/react": "^2.2.0",
     "motion": "^11.18.2",
     "date-fns": "^4.1.0",
-    "clsx": "^2.1.1"
+    "clsx": "^2.1.1",
+    "resend": "^4.1.2"
   },
   "devDependencies": {
     "eslint": "^9",
