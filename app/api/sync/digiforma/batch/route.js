@@ -18,7 +18,8 @@ export async function POST(request) {
     const result = await syncBatch(body.syncRunId, body.sessionIds, {
       targetYear: body.targetYear,
       pipelineState: body.pipelineState,
-      concurrency: body.concurrency || 3,
+      concurrency: body.concurrency ?? 1,
+      pauseMs: body.pauseMs ?? 500,
     });
 
     return Response.json({
