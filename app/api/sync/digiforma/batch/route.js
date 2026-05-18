@@ -1,5 +1,9 @@
 import { syncBatch } from '../../../../../lib/services/sync-service.js';
 
+// Vercel: allow up to 300s (Pro plan) — on Hobby the cap is 60s
+export const maxDuration = 300;
+export const dynamic = 'force-dynamic';
+
 export async function POST(request) {
   try {
     const body = await request.json();
@@ -14,6 +18,7 @@ export async function POST(request) {
     const result = await syncBatch(body.syncRunId, body.sessionIds, {
       targetYear: body.targetYear,
       pipelineState: body.pipelineState,
+      concurrency: body.concurrency || 3,
     });
 
     return Response.json({

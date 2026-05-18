@@ -1,5 +1,8 @@
 import { startSync } from '../../../../../lib/services/sync-service.js';
 
+export const maxDuration = 300;
+export const dynamic = 'force-dynamic';
+
 export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}));

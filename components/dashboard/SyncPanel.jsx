@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import { RefreshCw, Play, CheckCircle, XCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import apiClient from '../../lib/axios';
+import { syncApiClient } from '../../lib/axios';
 import Button from '../ui/Button';
 import ProgressBar from '../ui/ProgressBar';
 
-const BATCH_SIZE = 5;
+const BATCH_SIZE = 3;
 
 export default function SyncPanel({ onSyncComplete }) {
   const [config, setConfig] = useState({
@@ -34,7 +34,7 @@ export default function SyncPanel({ onSyncComplete }) {
     updateState({ status: 'starting', message: 'Démarrage de la synchronisation…', errors: [], syncedSessions: 0 });
 
     try {
-      const { data: startData } = await apiClient.post('/sync/digiforma/start', {
+      const { data: startData } = await syncApiClient.post('/sync/digiforma/start', {
         targetYear: config.targetYear,
         pipelineState: config.pipelineState,
         onlyActive: config.onlyActive,
@@ -57,7 +57,7 @@ export default function SyncPanel({ onSyncComplete }) {
 
         updateState({ message: `Batch ${Math.floor(i / batchSize) + 1} / ${Math.ceil(sessions.length / batchSize)}…` });
 
-        const { data: batchData } = await apiClient.post('/sync/digiforma/batch', {
+        const { data: batchData } = await syncApiClient.post('/sync/digiforma/batch', {
           syncRunId,
           sessionIds,
           targetYear: config.targetYear,
@@ -70,7 +70,7 @@ export default function SyncPanel({ onSyncComplete }) {
       }
 
       // Finish
-      await apiClient.post('/sync/digiforma/finish', { syncRunId });
+      await syncApiClient.post('/sync/digiforma/finish', { syncRunId });
       updateState({ status: 'done', message: `Synchronisation terminée — ${synced} session(s) synchronisée(s).`, errors: allErrors });
 
       if (onSyncComplete) onSyncComplete();
